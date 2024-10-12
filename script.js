@@ -1,8 +1,38 @@
-// Step 1: Set up the game canvas (same as before)
+// Step 1: Set up the game canvas and make it responsive
 const canvas = document.getElementById('gameCanvas');
 const context = canvas.getContext('2d');
-canvas.width = 480;
-canvas.height = 640;
+
+// Function to set canvas size
+function setCanvasSize() {
+  const desktopWidth = 480;
+  const desktopHeight = 640;
+  const aspectRatio = desktopWidth / desktopHeight;
+  const maxWidth = window.innerWidth * 0.95; // 95% of window width
+  const maxHeight = window.innerHeight * 0.95; // 95% of window height
+
+  if (
+    window.innerWidth >= desktopWidth &&
+    window.innerHeight >= desktopHeight
+  ) {
+    // Use fixed size for desktop
+    canvas.width = desktopWidth;
+    canvas.height = desktopHeight;
+  } else if (maxWidth / aspectRatio <= maxHeight) {
+    // Fit to width
+    canvas.width = maxWidth;
+    canvas.height = maxWidth / aspectRatio;
+  } else {
+    // Fit to height
+    canvas.height = maxHeight;
+    canvas.width = maxHeight * aspectRatio;
+  }
+}
+
+// Set initial canvas size
+setCanvasSize();
+
+// Update canvas size when window is resized
+window.addEventListener('resize', setCanvasSize);
 
 // Fill the canvas background (sky color)
 context.fillStyle = '#70c5ce';
@@ -256,15 +286,21 @@ function gameLoop() {
 // Start the game loop
 gameLoop();
 
-// Control the game with spacebar or mouse click
+// Control the game with spacebar, mouse click, or touch
 function handleInput(event) {
   if (!flapSound && !gameOverSound) {
     initializeSounds(); // Initialize sounds on first input
   }
 
+  // Prevent default behavior for touch events to avoid scrolling
+  if (event.type === 'touchstart') {
+    event.preventDefault();
+  }
+
   if (
     (event.type === 'keydown' && event.code === 'Space') ||
-    event.type === 'click'
+    event.type === 'click' ||
+    event.type === 'touchstart'
   ) {
     if (isGameOver) {
       resetGame();
