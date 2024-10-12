@@ -256,18 +256,25 @@ function gameLoop() {
 // Start the game loop
 gameLoop();
 
-// Reset the game when the spacebar is pressed after game over
-document.addEventListener('keydown', function (event) {
+// Control the game with spacebar or mouse click
+function handleInput(event) {
   if (!flapSound && !gameOverSound) {
-    initializeSounds(); // Initialize sounds on first key press
+    initializeSounds(); // Initialize sounds on first input
   }
 
-  if (event.code === 'Space') {
-    flap(); // Call the flap function when spacebar is pressed
+  if (
+    (event.type === 'keydown' && event.code === 'Space') ||
+    event.type === 'click'
+  ) {
+    if (isGameOver) {
+      resetGame();
+      gameLoop(); // Restart the game loop
+    } else {
+      flap(); // Call the flap function
+    }
   }
+}
 
-  if (event.code === 'Space' && isGameOver) {
-    resetGame();
-    gameLoop(); // Restart the game loop
-  }
-});
+// Add event listeners for both keydown and click events
+document.addEventListener('keydown', handleInput);
+document.addEventListener('click', handleInput);

@@ -9,6 +9,7 @@
         body {
             margin: 0;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -18,11 +19,22 @@
         canvas {
             border: 2px solid black;
         }
+
+        #tutorial {
+            margin-top: 20px;
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            text-align: center;
+        }
     </style>
 </head>
 
 <body>
     <canvas id="gameCanvas"></canvas>
+    <div id="tutorial">
+        Press <strong>Space</strong> to make the bird flap and start the game.<br>
+        Keep pressing <strong>Space</strong> to control the bird's flight!
+    </div>
 
     <script src="script.js"></script>
 </body>
